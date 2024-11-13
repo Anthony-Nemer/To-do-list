@@ -1,17 +1,20 @@
 body{
   background-color: #AECCE4;
 }
+
 .to-do-list{
   font-family: Arial, sans-serif;
   text-align: center;
   margin: 100px;    
 }
+
 h1{
   font-size: 4rem;
   color: white;
 }
+
 button{
-  font-size: 1.7rem;
+  font-size: 1.2rem;
   font-weight: bold;
   padding: 10px 20px;
   color: white;
@@ -20,24 +23,32 @@ button{
   cursor: pointer;
   transition: background-color 0.5s ease;
 }
+
 .add-button{
+  font-size: 1.7rem;
   background-color: hsla(0, 0%, 100%, 0.514);
 }
+
 .add-button:hover{
   background-color: hsla(0, 0%, 70%, 0.514);
 }
+
 .delete-button{
   background-color: hsl(10, 90%, 50%);
 }
+
 .delete-button:hover{
-  background-color: hsl(10, 90%, 40%);
+  background-color: hsl(10, 90%, 30%);
 }
+
 .move-button{
   background-color: hsla(0, 0%, 100%, 0.514);
 }
+
 .move-button:hover{
   background-color: hsla(0, 0%, 70%, 0.514);
 }
+
 input[type='text']{
   font-size: 1.6rem;
   padding: 10px;
@@ -45,12 +56,14 @@ input[type='text']{
   border-radius: 5px;
   color: hsla(0, 0%, 0%, 0.5);
 }
+
 ol{
   padding: 0;
 }
+
 li{
-  font-size: 2rem;
-  font-weight: bold;
+  font-size: 1.4rem;
+  font-weight:lighter;
   padding: 15px;
   background-color: hsl(0, 0%, 97%);
   margin-bottom: 10px;
@@ -59,20 +72,31 @@ li{
   display: flex;
   align-items: center;
 }
+
 .text{
   flex: 1;
 }
 
-.delete-button, .move-button .complete-button{
-  padding: 8px 12px;
-  font-size: 1.4rem;
-  margin-left: 10px;
+.delete-button, .move-button, .complete-button{
+  padding: 8px 12px; /* Ensures buttons are the same size */
+  font-size: 1.2rem; /* Consistent font size */
+  margin-left: 10px; /* Keeps buttons spaced evenly */
 }
+
 .complete-button{
-  background-color: hsl(120, 100%, 25%);
+  background-color: hsl(192, 62%, 40%);
 }
+
 .complete-button:hover{
-  background-color: hsl(120, 100%, 15%);
+  background-color: hsl(192, 100%, 25%);
+}
+
+.delete-button{
+  background-color: hsl(10, 90%, 50%);
+}
+
+.delete-button:hover{
+  background-color: hsl(10, 90%, 40%);
 }
 
 /* For mobile devices */
@@ -85,10 +109,10 @@ li{
       font-size: 1.8rem; /* Further adjust font size */
   }
 
-  button {
-      font-size: 1.2rem; /* Further adjust button font size */
-      padding: 6px 12px; /* Further adjust button padding */
-  }
+  /* button {
+      font-size: 1.2rem; 
+      padding: 6px 12px; 
+  } */
 
   input[type='text'] {
       font-size: 1.2rem; /* Further adjust font size */

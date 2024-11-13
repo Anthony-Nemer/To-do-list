@@ -67,12 +67,12 @@ function ToDoList() {
                         <button className='delete-button' onClick={() => deleteTask(index)}>
                             Delete
                         </button>
-                        <button className='move-button' onClick={() => moveUp(index)}>
+                        {/* <button className='move-button' onClick={() => moveUp(index)}>
                             👆
                         </button>
                         <button className='move-button' onClick={() => moveDown(index)}>
                             👇
-                        </button>
+                        </button> */}
                         <button className='complete-button' onClick={() => handleCompletedTask(index)}>
                             {task.completed ? 'Undo' : 'Complete'}
                         </button>
