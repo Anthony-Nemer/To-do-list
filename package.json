@@ -3,7 +3,7 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
-  "homepage": "https://Anthony-Nemer.github.io/o-do-list",
+  "homepage": "https://Anthony-Nemer.github.io/To-do-list",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
