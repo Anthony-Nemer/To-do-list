@@ -14,7 +14,7 @@ function ToDoList() {
             setTasks(t => [...t, { text: newTask, completed: false }]);
             setNewTask("");
         }
-    }
+    }// nasckjkbzk
 
     function deleteTask(index) {
         const updatedTasks = tasks.filter((_, i) => i !== index);
