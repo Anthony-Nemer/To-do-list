@@ -4,5 +4,5 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig({
   plugins: [react()],
-  base: '/To-do-list/', // For your custom domain
+  base: '/', // For your custom domain
 });
