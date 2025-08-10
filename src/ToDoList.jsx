@@ -63,7 +63,7 @@ function ToDoList() {
             <ol>
                 {tasks.map((task, index) => (
                     <li key={index} style={{ backgroundColor: task.completed ? 'darkgrey' : 'white' }}>
-                        <span className='text'>{task.text}</span>
+                        <span className='text' style={{ fontWeight: 'bold' }}>{task.text}</span>
                         <button className='delete-button' onClick={() => deleteTask(index)}>
                             Delete
                         </button>
