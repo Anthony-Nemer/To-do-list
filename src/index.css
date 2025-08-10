@@ -84,19 +84,19 @@ li{
 }
 
 .complete-button{
-  background-color: hsl(192, 62%, 40%);
+  background-color: hsl(346, 100%, 89%);
 }
 
 .complete-button:hover{
-  background-color: hsl(192, 100%, 25%);
+  background-color: hsl(346, 100%, 95%);
 }
 
 .delete-button{
-  background-color: hsl(10, 90%, 50%);
+  background-color: hsl(342, 75%, 62%);
 }
 
 .delete-button:hover{
-  background-color: hsl(10, 90%, 40%);
+  background-color: hsl(342, 75%, 75%);
 }
 
 /* For mobile devices */
