@@ -24,6 +24,7 @@ button{
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  font-family: 'Baloo', cursive;
   transition: background-color 0.5s ease;
 }
 
@@ -57,6 +58,7 @@ input[type='text']{
   padding: 10px;
   border: 2px solid hsla(0, 0%, 22%, 0.904);
   border-radius: 5px;
+  font-family: 'Baloo', cursive;
   color: hsla(0, 0%, 0%, 0.5);
 }
 
@@ -132,3 +134,19 @@ li{
       padding: 6px 10px; /* Adjust button padding */
   }
 }
+
+
+.app-shell { position: relative; z-index: 1; }
+
+.bg-video {
+  position: fixed;
+  inset: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+  z-index: 0;
+  opacity: 0;
+  transition: opacity 800ms ease;
+  pointer-events: none;
+}
+.bg-video.show { opacity: 1; }
