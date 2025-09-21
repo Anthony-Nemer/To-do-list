@@ -3,8 +3,11 @@ import React, { useState, useRef, useEffect } from 'react';
 // Configure via .env (Vite):
 // VITE_API_BASE=https://your-api-host.onrender.com
 // VITE_API_TOKEN=supersecrettoken   (optional, only if you enabled API auth)
-const API_BASE  = import.meta.env.VITE_API_BASE;
-const API_TOKEN = import.meta.env.VITE_API_TOKEN;
+const API_BASE =
+  (import.meta?.env && import.meta.env.VITE_API_BASE) ||
+  "https://todo-project-api-iovd.onrender.com"; // safe fallback
+
+const API_TOKEN = import.meta?.env?.VITE_API_TOKEN;
 
 function ToDoList() {
   const [tasks, setTasks] = useState([]);
