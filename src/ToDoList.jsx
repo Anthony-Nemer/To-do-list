@@ -1,13 +1,6 @@
 import React, { useState, useRef, useEffect } from 'react';
 
-// Configure via .env (Vite):
-// VITE_API_BASE=https://your-api-host.onrender.com
-// VITE_API_TOKEN=supersecrettoken   (optional, only if you enabled API auth)
-const API_BASE =
-  (import.meta?.env && import.meta.env.VITE_API_BASE) ||
-  "https://todo-project-api-iovd.onrender.com"; // safe fallback
-
-const API_TOKEN = import.meta?.env?.VITE_API_TOKEN;
+const STORAGE_KEY = 'todo_tasks_v1';
 
 function ToDoList() {
   const [tasks, setTasks] = useState([]);
@@ -15,109 +8,70 @@ function ToDoList() {
   const [showBgVideo, setShowBgVideo] = useState(false);
   const videoRef = useRef(null);
 
-  const headers = {
-    'Content-Type': 'application/json',
-    ...(API_TOKEN ? { Authorization: `Bearer ${API_TOKEN}` } : {}),
-  };
-
-  // Load tasks on mount
+  // Load tasks from localStorage on mount
   useEffect(() => {
-    if (!API_BASE) {
-      console.warn('VITE_API_BASE is not set. Tasks will not persist.');
-      return;
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY);
+      if (saved) setTasks(JSON.parse(saved));
+    } catch (e) {
+      console.error('Failed to load tasks from localStorage', e);
     }
-    fetch(`${API_BASE}/tasks`, { headers })
-      .then(r => {
-        if (!r.ok) throw new Error(`Fetch tasks failed: ${r.status}`);
-        return r.json();
-      })
-      .then(setTasks)
-      .catch(err => console.error(err));
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Persist tasks to localStorage whenever they change
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+    } catch (e) {
+      console.error('Failed to save tasks to localStorage', e);
+    }
+  }, [tasks]);
 
   function handleInputChange(event) {
     setNewTask(event.target.value);
   }
 
-  // Create (persisted)
+  // Create (local only)
   function addTask(event) {
     event.preventDefault();
     const text = newTask.trim();
     if (!text) return;
-
-    fetch(`${API_BASE}/tasks`, {
-      method: 'POST',
-      headers,
-      body: JSON.stringify({ text }),
-    })
-      .then(r => {
-        if (!r.ok) throw new Error(`Create failed: ${r.status}`);
-        return r.json();
-      })
-      .then(created => {
-        setTasks(t => [...t, created]);
-        setNewTask('');
-      })
-      .catch(err => console.error(err));
+    const created = { _id: crypto.randomUUID(), text, completed: false };
+    setTasks(t => [...t, created]);
+    setNewTask('');
   }
 
-  // Delete (persisted)
+  // Delete (local only)
   function deleteTask(index) {
-    const id = tasks[index]?._id;
-    if (!id) return;
-
-    // optimistic UI
-    const prev = tasks;
     setTasks(ts => ts.filter((_, i) => i !== index));
-
-    fetch(`${API_BASE}/tasks/${id}`, {
-      method: 'DELETE',
-      headers,
-    })
-      .then(r => {
-        if (!r.ok && r.status !== 204) throw new Error(`Delete failed: ${r.status}`);
-      })
-      .catch(err => {
-        console.error(err);
-        setTasks(prev); // rollback
-      });
   }
 
-  // Toggle complete (persisted) + video celebration
+  // Toggle complete (local only) + video celebration
   function handleCompletedTask(index) {
-    const task = tasks[index];
-    if (!task?._id) return;
+    setTasks(ts => {
+      const t = ts[index];
+      if (!t) return ts;
 
-    const nextCompleted = !task.completed;
+      const nextCompleted = !t.completed;
+      const updated = ts.map((item, i) =>
+        i === index ? { ...item, completed: nextCompleted } : item
+      );
 
-    // optimistic UI
-    setTasks(ts => ts.map((t, i) => (i === index ? { ...t, completed: nextCompleted } : t)));
-
-    // celebration video on complete
-    if (nextCompleted) {
-      const v = videoRef.current;
-      if (v) {
-        try {
-          v.currentTime = 0;
-          v.play(); 
-          setShowBgVideo(true);
-        } catch {
-          /* ignore play promise errors */
+      // celebration video on complete
+      if (nextCompleted) {
+        const v = videoRef.current;
+        if (v) {
+          try {
+            v.currentTime = 0;
+            v.play();
+            setShowBgVideo(true);
+          } catch {
+            /* ignore play promise errors */
+          }
         }
       }
-    }
 
-    fetch(`${API_BASE}/tasks/${task._id}`, {
-      method: 'PATCH',
-      headers,
-      body: JSON.stringify({ completed: nextCompleted }),
-    }).then(r => {
-      if (!r.ok) throw new Error(`Update failed: ${r.status}`);
-      return r.json();
-    }).catch(err => {
-      console.error(err);
-      // rollback
-      setTasks(ts => ts.map((t, i) => (i === index ? { ...t, completed: !nextCompleted } : t)));
+      return updated;
     });
   }
 
@@ -142,7 +96,7 @@ function ToDoList() {
       <video
         ref={videoRef}
         className={`bg-video ${showBgVideo ? 'show' : ''}`}
-        src="/celeb.mp4"  
+        src="/celeb.mp4"
         muted
         playsInline
         preload="auto"
