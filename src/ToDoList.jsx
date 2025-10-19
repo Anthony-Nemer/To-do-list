@@ -104,12 +104,19 @@ function ToDoList() {
 
       <div className="app-shell">
         <div className="to-do-list">
-          <h1>To-Do-List 123</h1>
+          <h1>To-Do-List</h1>
 
           <form onSubmit={addTask}>
             <input
-              autoComplete='false'
               type="text"
+              autoComplete="off"
+              name="task"       
+              inputMode="text"
+              autoCorrect="off"
+              autoCapitalize="none"
+              spellCheck={false}
+              enterKeyHint="done"
+
               placeholder="Enter a task ..."
               value={newTask}
               onChange={handleInputChange}
