@@ -108,6 +108,7 @@ function ToDoList() {
 
           <form onSubmit={addTask}>
             <input
+              autoComplete='false'
               type="text"
               placeholder="Enter a task ..."
               value={newTask}
