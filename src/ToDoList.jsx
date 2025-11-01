@@ -8,17 +8,22 @@ function ToDoList() {
   const [showBgVideo, setShowBgVideo] = useState(false);
   const videoRef = useRef(null);
 
-  // Load tasks from localStorage on mount
+  // ✅ helper: keep incompletes on top, preserve relative order within groups
+  const reorderTasks = (list) => {
+    const pending = list.filter(t => !t.completed);
+    const done = list.filter(t => t.completed);
+    return [...pending, ...done];
+  };
+
   useEffect(() => {
     try {
       const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) setTasks(JSON.parse(saved));
+      if (saved) setTasks(reorderTasks(JSON.parse(saved)));
     } catch (e) {
       console.error('Failed to load tasks from localStorage', e);
     }
   }, []);
 
-  // Persist tasks to localStorage whenever they change
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
@@ -37,13 +42,16 @@ function ToDoList() {
     const text = newTask.trim();
     if (!text) return;
     const created = { _id: crypto.randomUUID(), text, completed: false };
-    setTasks(t => [...t, created]);
+    setTasks(t => reorderTasks([...t, created]));   // ⬅️ ensure new list is ordered
     setNewTask('');
   }
 
   // Delete (local only)
   function deleteTask(index) {
-    setTasks(ts => ts.filter((_, i) => i !== index));
+    setTasks(ts => {
+      const next = ts.filter((_, i) => i !== index);
+      return reorderTasks(next);                    // ⬅️ optional, keeps invariant
+    });
   }
 
   // Toggle complete (local only) + video celebration
@@ -57,7 +65,6 @@ function ToDoList() {
         i === index ? { ...item, completed: nextCompleted } : item
       );
 
-      // celebration video on complete
       if (nextCompleted) {
         const v = videoRef.current;
         if (v) {
@@ -65,34 +72,28 @@ function ToDoList() {
             v.currentTime = 0;
             v.play();
             setShowBgVideo(true);
-          } catch {
-            /* ignore play promise errors */
-          }
+          } catch {/* ignore */}
         }
       }
 
-      return updated;
+      return reorderTasks(updated);                 // ⬅️ completed tasks move to bottom
     });
   }
 
-  // Handle background video fade-out when it ends
   useEffect(() => {
     const v = videoRef.current;
     if (!v) return;
-
     const onEnded = () => {
       setShowBgVideo(false);
       v.pause();
       v.currentTime = 0;
     };
-
     v.addEventListener('ended', onEnded);
     return () => v.removeEventListener('ended', onEnded);
   }, []);
 
   return (
     <>
-      {/* Fullscreen background video behind everything */}
       <video
         ref={videoRef}
         className={`bg-video ${showBgVideo ? 'show' : ''}`}
@@ -116,7 +117,6 @@ function ToDoList() {
               autoCapitalize="none"
               spellCheck={false}
               enterKeyHint="done"
-
               placeholder="Enter a task ..."
               value={newTask}
               onChange={handleInputChange}
@@ -142,7 +142,6 @@ function ToDoList() {
               </li>
             ))}
           </ol>
-
         </div>
       </div>
     </>
