@@ -150,3 +150,35 @@ li{
   pointer-events: none;
 }
 .bg-video.show { opacity: 1; }
+
+
+/* 2 equal columns, safe against long text overflow */
+.task-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr)); /* minmax(0,1fr) prevents overflow */
+  gap: 12px;
+  list-style: none;
+  padding: 0;
+  margin: 20px 0 0;
+}
+
+/* Remove margins since grid uses gap */
+.task-grid li {
+  width: 100%;
+  margin: 0;                 /* <— prevents collision with gap */
+  box-sizing: border-box;    /* <— includes border/padding in width */
+}
+
+/* Make long words/URLs wrap instead of pushing into the other column */
+.text {
+  flex: 1;
+  overflow-wrap: anywhere;   /* <— key to avoid middle overlap */
+  word-break: break-word;
+}
+
+/* On small screens, revert to 1 column */
+@media (max-width: 600px) {
+  .task-grid {
+    grid-template-columns: 1fr;
+  }
+}

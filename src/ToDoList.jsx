@@ -110,7 +110,7 @@ function ToDoList() {
             <input
               type="text"
               autoComplete="off"
-              name="task"       
+              name="task"
               inputMode="text"
               autoCorrect="off"
               autoCapitalize="none"
@@ -124,7 +124,7 @@ function ToDoList() {
             <button type="submit" className="add-button">Add</button>
           </form>
 
-          <ol>
+          <ol className="task-grid">
             {tasks.map((task, index) => (
               <li
                 key={task._id ?? index}
@@ -142,6 +142,7 @@ function ToDoList() {
               </li>
             ))}
           </ol>
+
         </div>
       </div>
     </>
