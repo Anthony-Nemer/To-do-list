@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from 'react';
+import Snowfall from 'react-snowfall';
 
 const STORAGE_KEY = 'todo_tasks_v1';
 
@@ -94,6 +95,7 @@ function ToDoList() {
 
   return (
     <>
+    <Snowfall color='white' />
       <video
         ref={videoRef}
         className={`bg-video ${showBgVideo ? 'show' : ''}`}
