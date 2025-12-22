@@ -73,7 +73,7 @@ function ToDoList() {
             v.currentTime = 0;
             v.play();
             setShowBgVideo(true);
-          } catch {/* ignore */}
+          } catch {/* ignore */ }
         }
       }
 
@@ -95,7 +95,7 @@ function ToDoList() {
 
   return (
     <>
-    <Snowfall color='white' />
+      <Snowfall color='white' />
       <video
         ref={videoRef}
         className={`bg-video ${showBgVideo ? 'show' : ''}`}
@@ -107,6 +107,10 @@ function ToDoList() {
 
       <div className="app-shell">
         <div className="to-do-list">
+          <h1 className="christmas-title">
+            Merry Christmas Beby
+            <span className="candy-cane">🎀</span>
+          </h1>
           <h1>To-Do-List</h1>
 
           <form onSubmit={addTask}>
