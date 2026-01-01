@@ -3,11 +3,30 @@ import Snowfall from 'react-snowfall';
 
 const STORAGE_KEY = 'todo_tasks_v1';
 
+// ✅ NEW: motivation messages
+const MOTIVATION_QUOTES = [
+  "I believe in you baby 💖",
+  "You can do this baby 💪",
+  "Focus baby… I see you 👀",
+  "One task at a time baby 🫶",
+  "You’re stronger than you think 🔥",
+  "Finish it baby, then relax 😌",
+  "Small progress is still progress ✅",
+  "No distractions baby—lock in 🧠",
+  "You got this, I’m proud of you 💛",
+  "Keep going baby, don’t stop now 🚀",
+];
+
 function ToDoList() {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
   const [showBgVideo, setShowBgVideo] = useState(false);
+
+  // ✅ NEW: chosen message (picked once per refresh)
+  const [motivationText, setMotivationText] = useState('');
+
   const videoRef = useRef(null);
+  const chimeRef = useRef(null);
 
   // ✅ helper: keep incompletes on top, preserve relative order within groups
   const reorderTasks = (list) => {
@@ -15,6 +34,12 @@ function ToDoList() {
     const done = list.filter(t => t.completed);
     return [...pending, ...done];
   };
+
+  // ✅ NEW: pick a random message once per page refresh
+  useEffect(() => {
+    const pick = MOTIVATION_QUOTES[Math.floor(Math.random() * MOTIVATION_QUOTES.length)];
+    setMotivationText(pick);
+  }, []);
 
   useEffect(() => {
     try {
@@ -43,19 +68,16 @@ function ToDoList() {
     const text = newTask.trim();
     if (!text) return;
     const created = { _id: crypto.randomUUID(), text, completed: false };
-    setTasks(t => reorderTasks([...t, created]));   // ⬅️ ensure new list is ordered
+    setTasks(t => reorderTasks([...t, created]));
     setNewTask('');
   }
 
   // Delete (local only)
   function deleteTask(index) {
-    setTasks(ts => {
-      const next = ts.filter((_, i) => i !== index);
-      return reorderTasks(next);                    // ⬅️ optional, keeps invariant
-    });
+    setTasks(ts => reorderTasks(ts.filter((_, i) => i !== index)));
   }
 
-  // Toggle complete (local only) + video celebration
+  // Toggle complete (local only) + video celebration + sound
   function handleCompletedTask(index) {
     setTasks(ts => {
       const t = ts[index];
@@ -66,18 +88,28 @@ function ToDoList() {
         i === index ? { ...item, completed: nextCompleted } : item
       );
 
+      // ✅ only when marking as completed (not undo)
       if (nextCompleted) {
+        const a = chimeRef.current;
+        if (a) {
+          try {
+            a.currentTime = 0;
+            const p = a.play();
+            if (p?.catch) p.catch(() => {});
+          } catch {}
+        }
+
         const v = videoRef.current;
         if (v) {
           try {
             v.currentTime = 0;
             v.play();
             setShowBgVideo(true);
-          } catch {/* ignore */ }
+          } catch {}
         }
       }
 
-      return reorderTasks(updated);                 // ⬅️ completed tasks move to bottom
+      return reorderTasks(updated);
     });
   }
 
@@ -95,7 +127,17 @@ function ToDoList() {
 
   return (
     <>
-      <Snowfall color='white' />
+      {/* ✅ NEW: scrolling top strip */}
+      <div className="motivation-strip" aria-label="Motivation">
+        <div className="motivation-marquee">
+          <span className="motivation-text">{motivationText}</span>
+        </div>
+      </div>
+
+      <Snowfall color="white" />
+
+      <audio ref={chimeRef} src="/Magic%20Chime.mp3" preload="auto" />
+
       <video
         ref={videoRef}
         className={`bg-video ${showBgVideo ? 'show' : ''}`}
@@ -107,10 +149,6 @@ function ToDoList() {
 
       <div className="app-shell">
         <div className="to-do-list">
-          <h1 className="christmas-title">
-            Merry Christmas Beby
-            <span className="candy-cane">🎀</span>
-          </h1>
           <h1>To-Do-List</h1>
 
           <form onSubmit={addTask}>
