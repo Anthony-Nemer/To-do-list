@@ -1,9 +1,10 @@
-import React, { useState, useRef, useEffect } from 'react';
-import Snowfall from 'react-snowfall';
+// ToDoList.js
+import React, { useState, useRef, useEffect } from "react";
+import Snowfall from "react-snowfall";
 
-const STORAGE_KEY = 'todo_tasks_v1';
+const SESSION_KEY = "todo_session_v1";
 
-// ✅ NEW: motivation messages
+// ✅ motivation messages
 const MOTIVATION_QUOTES = [
   "I believe in you baby 💖",
   "You can do this baby 💪",
@@ -17,46 +18,68 @@ const MOTIVATION_QUOTES = [
   "Keep going baby, don’t stop now 🚀",
 ];
 
+// ✅ per-user storage key
+const getUserStorageKey = (userId) => `todo_tasks_user_${userId}`;
+
 function ToDoList() {
   const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
+  const [newTask, setNewTask] = useState("");
   const [showBgVideo, setShowBgVideo] = useState(false);
-
-  // ✅ NEW: chosen message (picked once per refresh)
-  const [motivationText, setMotivationText] = useState('');
+  const [motivationText, setMotivationText] = useState("");
+  const [user, setUser] = useState(null);
 
   const videoRef = useRef(null);
   const chimeRef = useRef(null);
 
-  // ✅ helper: keep incompletes on top, preserve relative order within groups
   const reorderTasks = (list) => {
-    const pending = list.filter(t => !t.completed);
-    const done = list.filter(t => t.completed);
+    const pending = list.filter((t) => !t.completed);
+    const done = list.filter((t) => t.completed);
     return [...pending, ...done];
   };
 
-  // ✅ NEW: pick a random message once per page refresh
+
   useEffect(() => {
-    const pick = MOTIVATION_QUOTES[Math.floor(Math.random() * MOTIVATION_QUOTES.length)];
+    const pick =
+      MOTIVATION_QUOTES[Math.floor(Math.random() * MOTIVATION_QUOTES.length)];
     setMotivationText(pick);
   }, []);
 
+
   useEffect(() => {
+    const raw = localStorage.getItem(SESSION_KEY);
+    if (!raw) {
+      window.location.href = "/login";
+      return;
+    }
     try {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) setTasks(reorderTasks(JSON.parse(saved)));
-    } catch (e) {
-      console.error('Failed to load tasks from localStorage', e);
+      setUser(JSON.parse(raw));
+    } catch {
+      localStorage.removeItem(SESSION_KEY);
+      window.location.href = "/login";
     }
   }, []);
 
   useEffect(() => {
+    if (!user) return;
+
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      const saved = localStorage.getItem(getUserStorageKey(user.userId));
+      if (saved) setTasks(reorderTasks(JSON.parse(saved)));
+      else setTasks([]); // if first time user logs in
     } catch (e) {
-      console.error('Failed to save tasks to localStorage', e);
+      console.error("Failed to load tasks from localStorage", e);
     }
-  }, [tasks]);
+  }, [user]);
+
+  useEffect(() => {
+    if (!user) return;
+
+    try {
+      localStorage.setItem(getUserStorageKey(user.userId), JSON.stringify(tasks));
+    } catch (e) {
+      console.error("Failed to save tasks to localStorage", e);
+    }
+  }, [tasks, user]);
 
   function handleInputChange(event) {
     setNewTask(event.target.value);
@@ -67,19 +90,20 @@ function ToDoList() {
     event.preventDefault();
     const text = newTask.trim();
     if (!text) return;
+
     const created = { _id: crypto.randomUUID(), text, completed: false };
-    setTasks(t => reorderTasks([...t, created]));
-    setNewTask('');
+    setTasks((t) => reorderTasks([...t, created]));
+    setNewTask("");
   }
 
   // Delete (local only)
   function deleteTask(index) {
-    setTasks(ts => reorderTasks(ts.filter((_, i) => i !== index)));
+    setTasks((ts) => reorderTasks(ts.filter((_, i) => i !== index)));
   }
 
   // Toggle complete (local only) + video celebration + sound
   function handleCompletedTask(index) {
-    setTasks(ts => {
+    setTasks((ts) => {
       const t = ts[index];
       if (!t) return ts;
 
@@ -95,8 +119,8 @@ function ToDoList() {
           try {
             a.currentTime = 0;
             const p = a.play();
-            if (p?.catch) p.catch(() => {});
-          } catch {}
+            if (p?.catch) p.catch(() => { });
+          } catch { }
         }
 
         const v = videoRef.current;
@@ -105,7 +129,7 @@ function ToDoList() {
             v.currentTime = 0;
             v.play();
             setShowBgVideo(true);
-          } catch {}
+          } catch { }
         }
       }
 
@@ -121,17 +145,45 @@ function ToDoList() {
       v.pause();
       v.currentTime = 0;
     };
-    v.addEventListener('ended', onEnded);
-    return () => v.removeEventListener('ended', onEnded);
+    v.addEventListener("ended", onEnded);
+    return () => v.removeEventListener("ended", onEnded);
   }, []);
+
+  const logout = () => {
+    localStorage.removeItem(SESSION_KEY);
+    window.location.href = "/login";
+  };
 
   return (
     <>
-      {/* ✅ NEW: scrolling top strip */}
-      <div className="motivation-strip" aria-label="Motivation">
-        <div className="motivation-marquee">
-          <span className="motivation-text">{motivationText}</span>
+      {/* ✅ Top bar: motivation (ONLY for userId === 1) */}
+      {user?.userId === 1 && (
+        <div className="motivation-strip" aria-label="Motivation">
+          <div className="motivation-marquee">
+            <span className="motivation-text">{motivationText}</span>
+          </div>
         </div>
+      )}
+
+      <div
+        style={{
+          position: "fixed",
+          right: 12,
+          top: user?.userId === 1 ? 50 : 12,
+          zIndex: 999999,
+          pointerEvents: "auto",
+        }}
+      >
+        {user && (
+          <>
+            <span style={{ marginRight: 10, fontWeight: "bold" }}>
+              👋 {user.username}
+            </span>
+            <button onClick={logout} type="button">
+              Logout
+            </button>
+          </>
+        )}
       </div>
 
       <Snowfall color="white" />
@@ -140,7 +192,7 @@ function ToDoList() {
 
       <video
         ref={videoRef}
-        className={`bg-video ${showBgVideo ? 'show' : ''}`}
+        className={`bg-video ${showBgVideo ? "show" : ""}`}
         src="/celeb.mp4"
         muted
         playsInline
@@ -165,23 +217,30 @@ function ToDoList() {
               value={newTask}
               onChange={handleInputChange}
             />
-            <button type="submit" className="add-button">Add</button>
+            <button type="submit" className="add-button">
+              Add
+            </button>
           </form>
 
           <ol className="task-grid">
             {tasks.map((task, index) => (
               <li
                 key={task._id ?? index}
-                style={{ backgroundColor: task.completed ? 'darkgrey' : 'white' }}
+                style={{ backgroundColor: task.completed ? "darkgrey" : "white" }}
               >
-                <span className="text" style={{ fontWeight: 'bold' }}>{task.text}</span>
+                <span className="text" style={{ fontWeight: "bold" }}>
+                  {task.text}
+                </span>
 
                 <button className="delete-button" onClick={() => deleteTask(index)}>
                   Delete
                 </button>
 
-                <button className="complete-button" onClick={() => handleCompletedTask(index)}>
-                  {task.completed ? 'Undo' : 'Complete'}
+                <button
+                  className="complete-button"
+                  onClick={() => handleCompletedTask(index)}
+                >
+                  {task.completed ? "Undo" : "Complete"}
                 </button>
               </li>
             ))}
