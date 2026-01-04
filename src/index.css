@@ -1,22 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo&display=swap');
 
-body{
+body {
   background-color: #f2bfce;
   font-family: 'Baloo', cursive;
 
 }
 
-.to-do-list{
+.to-do-list {
   text-align: center;
-  margin: 100px;    
+  margin: 100px;
 }
 
-h1{
+h1 {
   font-size: 4rem;
   color: white;
 }
 
-button{
+button {
   font-size: 1.2rem;
   font-weight: bold;
   padding: 10px 20px;
@@ -28,32 +28,32 @@ button{
   transition: background-color 0.5s ease;
 }
 
-.add-button{
+.add-button {
   font-size: 1.7rem;
   background-color: hsla(0, 0%, 100%, 0.514);
 }
 
-.add-button:hover{
+.add-button:hover {
   background-color: hsla(0, 0%, 70%, 0.514);
 }
 
-.delete-button{
+.delete-button {
   background-color: hsl(10, 90%, 50%);
 }
 
-.delete-button:hover{
+.delete-button:hover {
   background-color: hsl(10, 90%, 30%);
 }
 
-.move-button{
+.move-button {
   background-color: hsla(0, 0%, 100%, 0.514);
 }
 
-.move-button:hover{
+.move-button:hover {
   background-color: hsla(0, 0%, 70%, 0.514);
 }
 
-input[type='text']{
+input[type='text'] {
   font-size: 1.6rem;
   padding: 10px;
   border: 2px solid hsla(0, 0%, 22%, 0.904);
@@ -62,13 +62,13 @@ input[type='text']{
   color: hsla(0, 0%, 0%, 0.5);
 }
 
-ol{
+ol {
   padding: 0;
 }
 
-li{
+li {
   font-size: 1.4rem;
-  font-weight:lighter;
+  font-weight: lighter;
   padding: 15px;
   background-color: hsl(0, 0%, 97%);
   margin-bottom: 10px;
@@ -78,40 +78,47 @@ li{
   align-items: center;
 }
 
-.text{
+.text {
   flex: 1;
 }
 
-.delete-button, .move-button, .complete-button{
-  padding: 8px 12px; /* Ensures buttons are the same size */
-  font-size: 1.2rem; /* Consistent font size */
-  margin-left: 10px; /* Keeps buttons spaced evenly */
+.delete-button,
+.move-button,
+.complete-button {
+  padding: 8px 12px;
+  /* Ensures buttons are the same size */
+  font-size: 1.2rem;
+  /* Consistent font size */
+  margin-left: 10px;
+  /* Keeps buttons spaced evenly */
 }
 
-.complete-button{
+.complete-button {
   background-color: hsl(346, 100%, 89%);
 }
 
-.complete-button:hover{
+.complete-button:hover {
   background-color: hsl(346, 100%, 95%);
 }
 
-.delete-button{
+.delete-button {
   background-color: hsl(342, 75%, 62%);
 }
 
-.delete-button:hover{
+.delete-button:hover {
   background-color: hsl(342, 75%, 75%);
 }
 
 /* For mobile devices */
 @media (max-width: 480px) {
   .to-do-list {
-      margin: 20px 5px; /* Further reduce margin */
+    margin: 20px 5px;
+    /* Further reduce margin */
   }
 
   h1 {
-      font-size: 1.8rem; /* Further adjust font size */
+    font-size: 1.8rem;
+    /* Further adjust font size */
   }
 
   /* button {
@@ -120,23 +127,33 @@ li{
   } */
 
   input[type='text'] {
-      font-size: 1.2rem; /* Further adjust font size */
-      padding: 6px; /* Further adjust padding */
+    font-size: 1.2rem;
+    /* Further adjust font size */
+    padding: 6px;
+    /* Further adjust padding */
   }
 
   li {
-      font-size: 1.4rem; /* Further adjust font size */
-      padding: 8px; /* Further adjust padding */
+    font-size: 1.4rem;
+    /* Further adjust font size */
+    padding: 8px;
+    /* Further adjust padding */
   }
 
-  .delete-button, .move-button {
-      font-size: 1.2rem; /* Adjust button font size */
-      padding: 6px 10px; /* Adjust button padding */
+  .delete-button,
+  .move-button {
+    font-size: 1.2rem;
+    /* Adjust button font size */
+    padding: 6px 10px;
+    /* Adjust button padding */
   }
 }
 
 
-.app-shell { position: relative; z-index: 1; }
+.app-shell {
+  position: relative;
+  z-index: 1;
+}
 
 .bg-video {
   position: fixed;
@@ -149,13 +166,17 @@ li{
   transition: opacity 800ms ease;
   pointer-events: none;
 }
-.bg-video.show { opacity: 1; }
+
+.bg-video.show {
+  opacity: 1;
+}
 
 
 /* 2 equal columns, safe against long text overflow */
 .task-grid {
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr)); /* minmax(0,1fr) prevents overflow */
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  /* minmax(0,1fr) prevents overflow */
   gap: 12px;
   list-style: none;
   padding: 0;
@@ -165,14 +186,17 @@ li{
 /* Remove margins since grid uses gap */
 .task-grid li {
   width: 100%;
-  margin: 0;                 /* <— prevents collision with gap */
-  box-sizing: border-box;    /* <— includes border/padding in width */
+  margin: 0;
+  /* <— prevents collision with gap */
+  box-sizing: border-box;
+  /* <— includes border/padding in width */
 }
 
 /* Make long words/URLs wrap instead of pushing into the other column */
 .text {
   flex: 1;
-  overflow-wrap: anywhere;   /* <— key to avoid middle overlap */
+  overflow-wrap: anywhere;
+  /* <— key to avoid middle overlap */
   word-break: break-word;
 }
 
@@ -184,42 +208,171 @@ li{
 }
 
 
-.motivation-strip{
-          position: fixed;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 34px;
-          z-index: 9999;
-          background: rgba(0,0,0,0.75);
-          color: #fff;
-          overflow: hidden;
-          display: flex;
-          align-items: center;
-          border-bottom: 1px solid rgba(255,255,255,0.15);
-          backdrop-filter: blur(6px);
-        }
+.motivation-strip {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 34px;
+  z-index: 9999;
+  background: rgba(0, 0, 0, 0.75);
+  color: #fff;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  backdrop-filter: blur(6px);
+}
 
-        /* make sure your page content isn't hidden behind the fixed strip */
-        .app-shell{
-          padding-top: 34px;
-        }
+/* make sure your page content isn't hidden behind the fixed strip */
+.app-shell {
+  padding-top: 34px;
+}
 
-        .motivation-marquee{
-          width: 100%;
-          overflow: hidden;
-          white-space: nowrap;
-        }
+.motivation-marquee {
+  width: 100%;
+  overflow: hidden;
+  white-space: nowrap;
+}
 
-        .motivation-text{
-          display: inline-block;
-          padding-left: 100%;
-          animation: marquee-right-to-left 12s linear infinite;
-          font-weight: 700;
-          letter-spacing: 0.3px;
-        }
+.motivation-text {
+  display: inline-block;
+  padding-left: 100%;
+  animation: marquee-right-to-left 12s linear infinite;
+  font-weight: 700;
+  letter-spacing: 0.3px;
+}
 
-        @keyframes marquee-right-to-left{
-          0%   { transform: translateX(0); }
-          100% { transform: translateX(-100%); }
-        }
+@keyframes marquee-right-to-left {
+  0% {
+    transform: translateX(0);
+  }
+
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+/* =========================
+   MOBILE ONLY FIXES
+   (desktop stays unchanged)
+   ========================= */
+@media (max-width: 600px) {
+
+  /* prevent sideways scrolling */
+  html,
+  body {
+    overflow-x: hidden;
+  }
+
+  /* add top padding so fixed user/logout doesn't cover UI */
+  .app-shell {
+    padding-top: 70px;
+    padding-left: 12px;
+    padding-right: 12px;
+  }
+
+  /* make the todo container full width */
+  .to-do-list {
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 auto !important;
+    padding: 14px !important;
+    box-sizing: border-box;
+  }
+
+  /* smaller title so it doesn't look huge */
+  .to-do-list h1 {
+    font-size: 24px;
+    text-align: center;
+  }
+
+  /* form stacks nicely on phones */
+  .to-do-list form {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    width: 100%;
+  }
+
+  .to-do-list form input {
+    width: 100% !important;
+    box-sizing: border-box;
+    font-size: 16px;
+    /* important: prevents iOS zoom */
+    padding: 12px 12px;
+    border-radius: 12px;
+  }
+
+  .to-do-list form .add-button {
+    width: 100% !important;
+    padding: 12px 12px;
+    border-radius: 12px;
+    min-height: 46px;
+    font-size: 16px;
+  }
+
+  /* task grid becomes single column */
+  .task-grid {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 12px !important;
+    padding: 0 !important;
+    margin-top: 14px !important;
+  }
+
+  .task-grid li {
+    width: 100% !important;
+    box-sizing: border-box;
+    padding: 12px !important;
+    border-radius: 14px !important;
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 10px !important;
+    align-items: stretch !important;
+  }
+
+  /* keep text from overflowing */
+  .task-grid li .text {
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    font-size: 16px;
+  }
+
+  /* bigger buttons, full width */
+  .delete-button,
+  .complete-button {
+    width: 100% !important;
+    min-height: 46px !important;
+    font-size: 16px !important;
+    border-radius: 12px !important;
+  }
+
+  /* fixed logout looks nicer on mobile */
+  .mobile-user-bar {
+    top: 12px !important;
+    right: 12px !important;
+    left: 12px !important;
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    gap: 10px !important;
+    padding: 10px 12px !important;
+    border-radius: 14px !important;
+    background: rgba(0, 0, 0, 0.35) !important;
+    backdrop-filter: blur(10px);
+    box-sizing: border-box;
+  }
+
+  .mobile-user-bar button {
+    min-height: 40px;
+    border-radius: 12px;
+    padding: 8px 12px;
+  }
+
+  /* motivation strip: make it smaller on phones */
+  .motivation-strip {
+    font-size: 13px;
+    padding: 8px 0;
+  }
+}

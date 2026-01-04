@@ -166,7 +166,7 @@ function ToDoList() {
       )}
 
       <div
-        style={{
+         style={{
           position: "fixed",
           right: 12,
           top: user?.userId === 1 ? 50 : 12,
@@ -174,6 +174,7 @@ function ToDoList() {
           pointerEvents: "auto",
         }}
       >
+
         {user && (
           <>
             <span style={{ marginRight: 10, fontWeight: "bold" }}>
