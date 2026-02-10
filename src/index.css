@@ -1,7 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Baloo&display=swap');
 
 body {
-  background-color: #f2bfce;
+  background-color: #CC677C;
   font-family: 'Baloo', cursive;
 
 }
@@ -30,15 +30,15 @@ button {
 
 .add-button {
   font-size: 1.7rem;
-  background-color: hsla(0, 0%, 100%, 0.514);
+  background-color: #F3D8DC;
 }
 
 .add-button:hover {
-  background-color: hsla(0, 0%, 70%, 0.514);
+  background-color: #f3d8dcc5
 }
 
 .delete-button {
-  background-color: hsl(10, 90%, 50%);
+  background-color: #B54964;
 }
 
 .delete-button:hover {
@@ -94,19 +94,19 @@ li {
 }
 
 .complete-button {
-  background-color: hsl(346, 100%, 89%);
+  background-color: #F3D8DC;
 }
 
 .complete-button:hover {
-  background-color: hsl(346, 100%, 95%);
+  background-color: #f3d8dcc5;
 }
 
 .delete-button {
-  background-color: hsl(342, 75%, 62%);
+  background-color: #B54964;
 }
 
 .delete-button:hover {
-  background-color: hsl(342, 75%, 75%);
+  background-color: #d66c86;
 }
 
 /* For mobile devices */

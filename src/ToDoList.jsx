@@ -4,7 +4,6 @@ import Snowfall from "react-snowfall";
 
 const SESSION_KEY = "todo_session_v1";
 
-// ✅ motivation messages
 const MOTIVATION_QUOTES = [
   "I believe in you baby 💖",
   "You can do this baby 💪",
@@ -180,14 +179,14 @@ function ToDoList() {
             <span style={{ marginRight: 10, fontWeight: "bold" }}>
               👋 {user.username}
             </span>
-            <button onClick={logout} type="button">
+            <button onClick={logout} type="button" style={{ background:'#F3D8DC'}}>
               Logout
             </button>
           </>
         )}
       </div>
 
-      <Snowfall color="white" />
+      {/* <Snowfall color="white" /> */}
 
       <audio ref={chimeRef} src="/Magic%20Chime.mp3" preload="auto" />
 
