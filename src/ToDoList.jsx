@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 // import Snowfall from "react-snowfall";
 
 const MOTIVATION_QUOTES = [
@@ -29,6 +30,7 @@ function ToDoList() {
   const videoRef = useRef(null);
   const chimeRef = useRef(null);
 
+  const nav = useNavigate();
   const reorderTasks = (list) => {
     const pending = list.filter((t) => !t.completed);
     const done = list.filter((t) => t.completed);
@@ -99,8 +101,8 @@ function ToDoList() {
           try {
             audio.currentTime = 0;
             const playPromise = audio.play();
-            if (playPromise?.catch) playPromise.catch(() => {});
-          } catch {}
+            if (playPromise?.catch) playPromise.catch(() => { });
+          } catch { }
         }
 
         const video = videoRef.current;
@@ -109,7 +111,7 @@ function ToDoList() {
             video.currentTime = 0;
             video.play();
             setShowBgVideo(true);
-          } catch {}
+          } catch { }
         }
       }
 
@@ -141,6 +143,7 @@ function ToDoList() {
           </div>
         </div>
       )}
+
 
       <audio ref={chimeRef} src="/Magic%20Chime.mp3" preload="auto" />
 
@@ -209,6 +212,13 @@ function ToDoList() {
           </ol>
         </div>
       </div>
+      <button
+        type="button"
+        className="easter-egg-button"
+        onClick={() => nav("/flowers")}
+      >
+        Oups Whats this?
+      </button>
     </>
   );
 }
