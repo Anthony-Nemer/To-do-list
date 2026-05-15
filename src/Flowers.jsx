@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import "./Flowers.css";
 
 function Flower({ number }) {
@@ -12,13 +13,19 @@ function Flower({ number }) {
         <div className="flower__white-circle"></div>
 
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className={`flower__light flower__light--${i + 1}`}></div>
+          <div
+            key={i}
+            className={`flower__light flower__light--${i + 1}`}
+          ></div>
         ))}
       </div>
 
       <div className="flower__line">
         {Array.from({ length: number === 1 ? 6 : 4 }).map((_, i) => (
-          <div key={i} className={`flower__line__leaf flower__line__leaf--${i + 1}`}></div>
+          <div
+            key={i}
+            className={`flower__line__leaf flower__line__leaf--${i + 1}`}
+          ></div>
         ))}
       </div>
     </div>
@@ -33,7 +40,10 @@ function GrassGroup() {
         <div className="flower__grass--bottom"></div>
 
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className={`flower__grass__leaf flower__grass__leaf--${i + 1}`}></div>
+          <div
+            key={i}
+            className={`flower__grass__leaf flower__grass__leaf--${i + 1}`}
+          ></div>
         ))}
 
         <div className="flower__grass__overlay"></div>
@@ -46,7 +56,11 @@ function LongGrass({ number }) {
   return (
     <div className={`long-g long-g--${number}`}>
       {[0, 1, 2, 3].map((leaf, i) => (
-        <div key={leaf} className="grow-ans" style={{ "--d": `${2.4 + i * 0.4}s` }}>
+        <div
+          key={leaf}
+          className="grow-ans"
+          style={{ "--d": `${2.4 + i * 0.4}s` }}
+        >
           <div className={`leaf leaf--${leaf}`}></div>
         </div>
       ))}
@@ -56,6 +70,7 @@ function LongGrass({ number }) {
 
 function Flowers() {
   const [loaded, setLoaded] = useState(false);
+  const nav = useNavigate();
 
   useEffect(() => {
     const timer = setTimeout(() => setLoaded(true), 800);
@@ -65,13 +80,19 @@ function Flowers() {
   return (
     <div className={`flowers-page ${loaded ? "loaded" : ""}`}>
       <div className="night"></div>
-<div className="butterflies">
-  {Array.from({ length: 10 }).map((_, i) => (
-    <span key={i} className={`butterfly butterfly--${i + 1}`}>
-      🦋
-    </span>
-  ))}
-</div>
+
+      <button className="focus-btn" onClick={() => nav("/")}>
+        yalla back to focus
+      </button>
+
+      <div className="butterflies">
+        {Array.from({ length: 10 }).map((_, i) => (
+          <span key={i} className={`butterfly butterfly--${i + 1}`}>
+            🦋
+          </span>
+        ))}
+      </div>
+
       <div className="flowers-scene">
         <Flower number={1} />
         <Flower number={2} />
